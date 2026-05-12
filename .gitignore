@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.vercel/
+.netlify/
+*.log
+.DS_Store
+
+# env files (los específicos por proyecto también los ignoran sus .gitignore)
+.env
+.env.local
+.env.production
+.env.development
