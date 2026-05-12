@@ -26,6 +26,23 @@ export const app = new Hono()
   .route("/api/orders", ordersRoutes)
   .route("/api/seed", seedRoutes);
 
+app.onError((err, c) => {
+  const cause = (err as { cause?: { message?: string; code?: string } }).cause;
+  console.error("[ERROR MESSAGE]", err.message);
+  if (cause) {
+    console.error("[ERROR CAUSE]", JSON.stringify(cause));
+  }
+  console.error("[ERROR STACK]", err.stack);
+  return c.json(
+    {
+      error: err.message,
+      cause: cause?.message ?? null,
+      code: cause?.code ?? null,
+    },
+    500,
+  );
+});
+
 export type AppType = typeof app;
 
 export default app;
