@@ -11,6 +11,7 @@ const pool = new pg.Pool({
   max: isServerless ? 1 : 10,
   idleTimeoutMillis: isServerless ? 10_000 : 30_000,
   connectionTimeoutMillis: 10_000,
+  ssl: isServerless ? { rejectUnauthorized: false } : undefined,
 });
 
 export const schema = { ...authSchema, ...businessSchema };
