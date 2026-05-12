@@ -7,7 +7,7 @@ const schema = z.object({
   BETTER_AUTH_URL: z.string().min(1),
   CORS_ORIGIN: z.string().min(1),
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-  SUPABASE_URL: z.string().url().optional(),
+  SUPABASE_URL: z.url().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
   SUPABASE_STORAGE_BUCKET: z.string().default("product-images"),
   PRICING_MIN_MARGIN_PCT: z.coerce.number().min(0).max(500).default(20),
@@ -15,8 +15,11 @@ const schema = z.object({
 
 const parsed = schema.safeParse(process.env);
 if (!parsed.success) {
-  console.error("Invalid environment variables:", z.treeifyError(parsed.error));
-  process.exit(1);
+  const tree = z.treeifyError(parsed.error);
+  console.error("Invalid environment variables:", JSON.stringify(tree, null, 2));
+  throw new Error(
+    `Invalid environment variables: ${JSON.stringify(tree)}`,
+  );
 }
 
 export const env = parsed.data;
