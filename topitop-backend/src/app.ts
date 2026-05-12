@@ -27,3 +27,5 @@ export const app = new Hono()
   .route("/api/seed", seedRoutes);
 
 export type AppType = typeof app;
+
+export default app;
