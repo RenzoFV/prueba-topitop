@@ -1,7 +1,7 @@
 [build]
   base = "topitop-frontend"
   command = "npm run build"
-  publish = "topitop-frontend/dist"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"

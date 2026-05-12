@@ -6,8 +6,7 @@
   ],
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"],
-      "@backend/*": ["../topitop-backend/src/*"]
+      "@/*": ["./src/*"]
     }
   }
 }

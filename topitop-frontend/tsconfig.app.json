@@ -17,8 +17,7 @@
 
     /* Path aliases */
     "paths": {
-      "@/*": ["./src/*"],
-      "@backend/*": ["../topitop-backend/src/*"]
+      "@/*": ["./src/*"]
     },
 
     /* Linting */
