@@ -22,6 +22,15 @@ export const auth = betterAuth({
   trustedOrigins: [env.CORS_ORIGIN],
   secret: env.BETTER_AUTH_SECRET,
   baseURL: env.BETTER_AUTH_URL,
+  logger: {
+    level: "debug",
+    log: (level, message, ...args) => {
+      const argsStr = args.length
+        ? " " + args.map((a) => (typeof a === "object" ? JSON.stringify(a) : String(a))).join(" ")
+        : "";
+      console.log(`[BETTER-AUTH ${level}] ${message}${argsStr}`);
+    },
+  },
   advanced: isProd
     ? {
         defaultCookieAttributes: {

@@ -19,7 +19,27 @@ export const app = new Hono()
     }),
   )
   .get("/", (c) => c.json({ status: "ok", service: "topitop-backend" }))
-  .on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw))
+  .on(["POST", "GET"], "/api/auth/*", async (c) => {
+    try {
+      return await auth.handler(c.req.raw);
+    } catch (err) {
+      const cause = (err as { cause?: { message?: string; code?: string; detail?: string } }).cause;
+      console.error("[AUTH HANDLER ERROR]", (err as Error).message);
+      console.error("[AUTH HANDLER CAUSE MSG]", cause?.message);
+      console.error("[AUTH HANDLER CAUSE CODE]", cause?.code);
+      console.error("[AUTH HANDLER CAUSE DETAIL]", cause?.detail);
+      console.error("[AUTH HANDLER STACK]", (err as Error).stack);
+      return c.json(
+        {
+          error: (err as Error).message,
+          cause: cause?.message ?? null,
+          code: cause?.code ?? null,
+          detail: cause?.detail ?? null,
+        },
+        500,
+      );
+    }
+  })
   .route("/api/admin", adminRoutes)
   .route("/api/pim", pimRoutes)
   .route("/api/pricing", pricingRoutes)
