@@ -1,17 +1,19 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
-import { authClient, useSession } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
+import { useStableSession } from "@/lib/use-stable-session";
 import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { AppFooter } from "@/components/AppFooter";
 import { Logo } from "@/components/Logo";
 import { ShieldAlert } from "lucide-react";
 
 export function UnauthorizedPage() {
-  const { data: session } = useSession();
+  const { data: session } = useStableSession();
+  const navigate = useNavigate();
 
   async function handleSignOut() {
     await authClient.signOut();
-    window.location.href = "/login";
+    navigate("/login", { replace: true });
   }
 
   return (
