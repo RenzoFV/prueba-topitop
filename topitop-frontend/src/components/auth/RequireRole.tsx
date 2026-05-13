@@ -1,6 +1,6 @@
 import { Navigate, useLocation } from "react-router";
 import type { ReactNode } from "react";
-import { useSession } from "@/lib/auth-client";
+import { useStableSession } from "@/lib/use-stable-session";
 import { FullPageSpinner } from "@/components/FullPageSpinner";
 import type { Role } from "@/lib/roles";
 
@@ -11,9 +11,9 @@ export function RequireRole({
   roles: Role[];
   children: ReactNode;
 }) {
-  const { data: session, isPending } = useSession();
+  const { data: session, isInitialLoading } = useStableSession();
   const location = useLocation();
-  if (isPending) return <FullPageSpinner />;
+  if (isInitialLoading) return <FullPageSpinner />;
   if (!session) {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }

@@ -4,7 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useEffect } from "react";
-import { authClient, useSession } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
+import { useStableSession } from "@/lib/use-stable-session";
 import { ROLE_HOME, type Role } from "@/lib/roles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,7 +37,7 @@ function redirectFor(role: Role | null | undefined): string {
 
 export function LoginPage() {
   const navigate = useNavigate();
-  const { data: session, isPending } = useSession();
+  const { data: session, isInitialLoading } = useStableSession();
 
   useEffect(() => {
     if (session) {
@@ -64,7 +65,7 @@ export function LoginPage() {
     navigate(redirectFor(role), { replace: true });
   }
 
-  if (isPending) return <FullPageSpinner />;
+  if (isInitialLoading) return <FullPageSpinner />;
 
   return (
     <div className="flex min-h-svh flex-col bg-background">
